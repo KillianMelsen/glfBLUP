@@ -14,8 +14,8 @@ covSS(
 )
 }
 \arguments{
-\item{data}{Dataframe containing the genotypes in the first column. The final column
-must contain the focal trait (if there is any).}
+\item{data}{Dataframe containing the genotypes in the first column and features/traits for which (co)variances should
+be estimated in the other columns.}
 
 \item{genoMeans}{Genotypic means. \code{NULL} by default and calculated internally. Can be specified to avoid
 repeated calculations if covSS is called for the same genotypes multiple times.}
@@ -33,8 +33,10 @@ and the focal to \code{0}.}
 \item{verbose}{Boolean}
 }
 \value{
-A list containing the phenotypic, genetic, and residual covariance matrices.
+A list containing the phenotypic, genetic, and residual covariance matrices, as well as a vector
+containing the plot level heritabilities.
 }
 \description{
-\code{covSS} calculates the phenotypic, genetic, and residual covariance matrix.
+\code{covSS} calculates the phenotypic, genetic, and residual covariance matrix. If bot \code{sec} and \code{foc}
+are specified, individual replicates must be in the same rows in each dataframe!
 }

@@ -69,7 +69,7 @@ regCor <- function(data, folds = 5, what = "genetic", dopar = FALSE, use_nearPD 
 
   covmats <- covSS(data = data, genoMeans = genoMeans, reps = reps, use_nearPD = use_nearPD)
 
-  if (verbose) {cat(sprintf("Optimal penalty value set at %f...\n", round(optPenalty, 3)))}
+  if (verbose) {cat(sprintf("Optimal penalty value set at %.3f...\n", round(optPenalty, 3)))}
 
   if (what == "phenotypic") {
     return(list(optPen = optPenalty,

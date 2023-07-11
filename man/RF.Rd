@@ -4,10 +4,12 @@
 \alias{RF}
 \title{RF}
 \usage{
-RF(cormat, tau = 0.95, verbose = TRUE)
+RF(cormat, sec = NULL, tau = 0.95, verbose = TRUE)
 }
 \arguments{
 \item{cormat}{A correlation matrix.}
+
+\item{sec}{An optional argument for a secondary feature data matrix that allows immediate filtering of the data matrix.}
 
 \item{tau}{Threshold value. The filtered matrix will have no pair of features with an absolute
 correlation larger than this threshold. Defaults to \code{0.95}.}
@@ -15,7 +17,7 @@ correlation larger than this threshold. Defaults to \code{0.95}.}
 \item{verbose}{Boolean.}
 }
 \value{
-A redundancy filtered correlation matrix.
+A redundancy filtered correlation matrix or a list containing the RF correlation matrix and RG secondary feature matrix.
 }
 \description{
 \code{RF} is a wrapper around \code{FMradio::RF} that redundancy filters a correlation matrix

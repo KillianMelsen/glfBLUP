@@ -4,14 +4,15 @@
 #' given a specified correlation threshold.
 #'
 #' @param cormat A correlation matrix.
+#' @param sec An optional argument for a secondary feature data matrix that allows immediate filtering of the data matrix.
 #' @param tau Threshold value. The filtered matrix will have no pair of features with an absolute
 #' correlation larger than this threshold. Defaults to \code{0.95}.
 #' @param verbose Boolean.
 #'
-#' @return A redundancy filtered correlation matrix.
+#' @return A redundancy filtered correlation matrix or a list containing the RF correlation matrix and RG secondary feature matrix.
 #' @export
 #'
-RF <- function(cormat, tau = 0.95, verbose = TRUE) {
+RF <- function(cormat, sec = NULL, tau = 0.95, verbose = TRUE) {
 
   # # Checks:
   # stopifnot("cormat contains non-numeric values!" = all(is.numeric(data[, -1])),
@@ -19,10 +20,17 @@ RF <- function(cormat, tau = 0.95, verbose = TRUE) {
   #           "cormat has diagonal entries other than 1!" = all(diag(cormat) == 1))
 
   cormat.filtered <- FMradio::RF(cormat, t = tau)
+  if (verbose) {cat(sprintf("%d out of %d features remaining...\n", nrow(cormat.filtered), nrow(cormat)))}
 
-  if (verbose) {
-    cat(sprintf("%d out of %d features remaining...\n", nrow(cormat.filtered), nrow(cormat)))
+  if (is.null(sec)) {
+    return(cormat.filtered)
+  } else {
+    sec.subset <- subsetRF(sec, cormat.filtered)
+    return(list(cormat.RF = cormat.filtered,
+                sec.RF = sec.subset))
   }
 
-  return(cormat.filtered)
+
+
+
 }

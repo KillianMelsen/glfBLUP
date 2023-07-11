@@ -1,9 +1,10 @@
 #' covSS
 #'
-#' \code{covSS} calculates the phenotypic, genetic, and residual covariance matrix.
+#' \code{covSS} calculates the phenotypic, genetic, and residual covariance matrix. If bot \code{sec} and \code{foc}
+#' are specified, individual replicates must be in the same rows in each dataframe!
 #'
-#' @param data Dataframe containing the genotypes in the first column. The final column
-#' must contain the focal trait (if there is any).
+#' @param data Dataframe containing the genotypes in the first column and features/traits for which (co)variances should
+#' be estimated in the other columns.
 #' @param genoMeans Genotypic means. \code{NULL} by default and calculated internally. Can be specified to avoid
 #' repeated calculations if covSS is called for the same genotypes multiple times.
 #' @param reps Number of replicates. Also \code{NULL} by default but can be specified for the same reasons
@@ -15,7 +16,8 @@
 #' and the focal to \code{0}.
 #' @param verbose Boolean
 #'
-#' @return A list containing the phenotypic, genetic, and residual covariance matrices.
+#' @return A list containing the phenotypic, genetic, and residual covariance matrices, as well as a vector
+#' containing the plot level heritabilities.
 #' @export
 #'
 covSS <- function(data, genoMeans = NULL, reps = NULL, use_nearPD = TRUE, sepExp = FALSE, verbose = TRUE) {
@@ -23,6 +25,19 @@ covSS <- function(data, genoMeans = NULL, reps = NULL, use_nearPD = TRUE, sepExp
   # # Checks:
   # stopifnot("NA values in the data!" = all(!is.na(data)),
   #           "Non-numeric values in the data!" = all(is.numeric(data[, -1])))
+
+  # stopifnot("No data supplied!" = is.null(sec) & is.null(foc))
+  # if (!is.null(sec) & is.null(foc)) {
+  #   stopifnot("genoMeans does not match sec!" = nrow(genoMeans) == length(unique(sec$G)))
+  #   data <- sec
+  # } else if (is.null(sec) & !is.null(foc)) {
+  #   stopifnot("genoMeans does not match foc!" = nrow(genoMeans) == length(unique(foc$G)))
+  #   data <- foc
+  # } else if (!is.null(sec) & !is.null(foc)) {
+  #   stopifnot("genoMeans$sec does not match sec!" = nrow(genoMeans$sec) == length(unique(sec$G)),
+  #             "genoMeans$foc does not match foc!" = nrow(genoMeans$foc) == length(unique(foc$G)))
+  #   data <- cbind(sec, foc[, -1])
+  # }
 
   # Determine number of traits (number of columns - 1 because of genotype column):
   n.features <- ncol(data) - 1
@@ -87,8 +102,12 @@ covSS <- function(data, genoMeans = NULL, reps = NULL, use_nearPD = TRUE, sepExp
     }
   }
 
-  # Calculate phenotypic covariance matrix and return all matrices:
+  h2s <- diag(Sg)/(diag(Sg + MS.E))
+  names(h2s) <- colnames(Sg)
+
+  # Calculate phenotypic covariance matrix and return all matrices including the heritabilities:
   return(list(Sp = Sg + MS.E,
               Sg = Sg,
-              Se = MS.E))
+              Se = MS.E,
+              h2s = h2s))
 }

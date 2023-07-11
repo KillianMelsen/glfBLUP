@@ -25,7 +25,7 @@ factorModel <- function(data, cormat, m = NULL, lower = 0.1, what = "genetic", v
     ev.thr <- (1 + sqrt(ncol(cormat) / length(unique(data$G))))^2
   }
 
-  if (verbose) {cat(sprintf("M-P bound is %f...\n", round(ev.thr, 3)))}
+  if (verbose) {cat(sprintf("M-P bound is %.3f...\n", round(ev.thr, 3)))}
 
   # Determining latent dimension:
   if (is.null(m)) {
