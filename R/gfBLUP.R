@@ -36,6 +36,7 @@ gfBLUP <- function(data, selection = NULL, K, sepExp = FALSE, verbose = TRUE) {
     data.subset <- data[, c("G", selection, "Y")]
   } else {
     selection <- names(data)[2:(length(names(data)) - 1)]
+    data.subset <- data[, c("G", selection, "Y")]
   }
 
   # Determining covariances between factors and focal trait:
