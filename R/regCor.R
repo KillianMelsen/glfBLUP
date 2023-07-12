@@ -24,10 +24,10 @@ regCor <- function(data, folds = 5, what = "genetic", dopar = FALSE, use_nearPD 
   #           "folds is neither a list or a number!" = class(folds) %in% c("numeric", "integer", "list"),
   #           "what must be either 'phenotypic', 'genetic', or 'residual'!" = what %in% c("phenotypic", "genetic", "residual"))
 
-  if (class(folds) == "list") {
+  if (inherits(folds, "list")) {
     stopifnot("Number of folds must be at least 2!" = length(folds) > 1,
               "Number of folds cannot exceed the number of genotypes!" = length(folds) <= length(unique(data$G)))
-  } else if (class(folds) %in% c("numeric", "integer")) {
+  } else if (inherits(folds, c("numeric", "integer"))) {
     stopifnot("Number of folds must be at least 2!" = folds > 1,
               "Number of folds cannot exceed the number of genotypes!" = folds <= length(unique(data$G)))
   }
@@ -43,7 +43,7 @@ regCor <- function(data, folds = 5, what = "genetic", dopar = FALSE, use_nearPD 
   if (is.null(penalty)) {
 
     # Determining folds if they were not specified in a list:
-    if (class(folds) != "list") {
+    if (!inherits(folds, "list")) {
       if (verbose) {cat("Creating folds...\n")}
       folds <- createFolds(genos = unique(data$G), folds = folds)
       }
@@ -73,12 +73,15 @@ regCor <- function(data, folds = 5, what = "genetic", dopar = FALSE, use_nearPD 
 
   if (what == "phenotypic") {
     return(list(optPen = optPenalty,
-                optCor = regCor_corlw(stats::cov2cor(covmats$Sp), optPenalty)))
+                optCor = regCor_corlw(stats::cov2cor(covmats$Sp), optPenalty),
+                Sp = covmats$Sp))
   } else if (what == "genetic") {
     return(list(optPen = optPenalty,
-                optCor = regCor_corlw(stats::cov2cor(covmats$Sg), optPenalty)))
+                optCor = regCor_corlw(stats::cov2cor(covmats$Sg), optPenalty),
+                Sg = covmats$Sg))
   } else if (what == "residual") {
     return(list(optPen = optPenalty,
-                optCor = regCor_corlw(stats::cov2cor(covmats$Se), optPenalty)))
+                optCor = regCor_corlw(stats::cov2cor(covmats$Se), optPenalty),
+                Se = covmats$Se))
   }
 }

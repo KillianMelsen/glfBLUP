@@ -39,7 +39,7 @@ factorModel <- function(data, cormat, m = NULL, lower = 0.1, what = "genetic", v
   rownames(rotmat) <- colnames(rotmat) <- colnames(fit$loadings)
 
   return(list(loadings = fit$loadings,
-              uniquenesses = fit$uniquenesses,
+              uniquenesses = diag(fit$uniquenesses),
               rotmat = rotmat,
               m = m))
 }

@@ -4,7 +4,7 @@
 \alias{factorScores}
 \title{factorScores}
 \usage{
-factorScores(data, loadings, uniquenesses, m, type = "thomson")
+factorScores(data, loadings, uniquenesses, m, type = "thomson", Se = NULL)
 }
 \arguments{
 \item{data}{Dataframe containing the secondary features used to estimate the factor scores. Genotypes should be in the first column.}
@@ -16,10 +16,14 @@ factorScores(data, loadings, uniquenesses, m, type = "thomson")
 \item{m}{Latent dimension.}
 
 \item{type}{Type of factor scores to be calculated.}
+
+\item{Se}{\code{NULL} by default. Must be specified if \code{"genetic-thomson"} is used as the type.}
 }
 \value{
 A dataframe with the factor scores.
 }
 \description{
-\code{factorScores} calculates the factor scores for each individual based on the loadings and uniquenesses, as well as the latent dimension.
+\code{factorScores} calculates the factor scores for each individual based on the loadings and
+uniquenesses, as well as the latent dimension. IMPORTANT: for \code{"genetic-thomson"} factor scores, both the loadings, uniquenesses,
+as well as the (regularized) residual covariance matrix must be on the covariance scale.
 }
