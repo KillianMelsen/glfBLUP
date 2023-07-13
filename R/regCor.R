@@ -59,7 +59,7 @@ regCor <- function(data, folds = 5, what = "genetic", dopar = FALSE, use_nearPD 
     # Optimization:
     optPenalty <- stats::optim(0.5, regCor_kcvl, method = "Brent", lower = 0, upper = 1,
                                data = data, folds = folds, genoMeans = genoMeans, reps = reps,
-                               dopar = dopar, use_nearPD = use_nearPD, what = what)$par
+                               dopar = dopar, use_nearPD = TRUE, what = what)$par
 
     if (dopar) {doParallel::stopImplicitCluster()}
   } else {
