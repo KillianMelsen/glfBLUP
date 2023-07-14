@@ -2,7 +2,7 @@
 #'
 #' \code{factorModel} fits the ML factor model using a correlation matrix and a specified latent dimension.
 #'
-#' @param data The datamatrix used to estimate the (regularized) correlation matrix. Only used to determine the number of
+#' @param data The datamatrix used to estimate the (regularized) correlation matrix used to fit the factor model. Only used to determine the number of
 #' individuals (in case of a phenotypic or residual correlation matrix) or number of genotypes (in case of a genetic correlation matrix).
 #' @param cormat The correlation matrix.
 #' @param m Latent dimension.

@@ -4,7 +4,7 @@
 \alias{regCor_kcvl}
 \title{regCor_kcvl}
 \usage{
-regCor_kcvl(penalty, data, folds, genoMeans, reps, dopar, use_nearPD, what)
+regCor_kcvl(penalty, data, folds, genoMeans, reps, dopar, what)
 }
 \arguments{
 \item{penalty}{Defaults to \code{NULL} but can be specified to override the data-driven regularization.}
@@ -18,8 +18,6 @@ regCor_kcvl(penalty, data, folds, genoMeans, reps, dopar, use_nearPD, what)
 \item{reps}{Number of replicates.}
 
 \item{dopar}{Boolean specifying whether to use parallelization.}
-
-\item{use_nearPD}{Should \code{Matrix::nearPD} be used to enforce PDness?}
 
 \item{what}{Type of correlation matrix that will be regularized.}
 }

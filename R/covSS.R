@@ -9,8 +9,6 @@
 #' repeated calculations if covSS is called for the same genotypes multiple times.
 #' @param reps Number of replicates. Also \code{NULL} by default but can be specified for the same reasons
 #' as \code{genoMeans}.
-#' @param use_nearPD Boolean indicating whether \code{Matrix::nearPD} should be used to enforce PDness of the
-#' genetic covariance matrix.
 #' @param sepExp Boolean specifying whether the focal trait was measured on different plants than the secondary
 #' features. Only use if there is a focal trait. Sets the residual covariances between secondary features or factors
 #' and the focal to \code{0}.
@@ -20,7 +18,7 @@
 #' containing the plot level heritabilities.
 #' @export
 #'
-covSS <- function(data, genoMeans = NULL, reps = NULL, use_nearPD = TRUE, sepExp = FALSE, verbose = TRUE) {
+covSS <- function(data, genoMeans = NULL, reps = NULL, sepExp = FALSE, verbose = TRUE) {
 
   # # Checks:
   # stopifnot("NA values in the data!" = all(!is.na(data)),
@@ -43,7 +41,7 @@ covSS <- function(data, genoMeans = NULL, reps = NULL, use_nearPD = TRUE, sepExp
   n.features <- ncol(data) - 1
 
   # Calculate genotype means if genoMeans is NULL:
-  if (is.null(genoMeans)) {genoMeans <- genoMeans(data)}
+  if (is.null(genoMeans)) {genoMeans <- genotypeMeans(data)}
 
   # Determine number of replicates if n.rep is NULL:
   if (is.null(reps)) {
@@ -85,20 +83,19 @@ covSS <- function(data, genoMeans = NULL, reps = NULL, use_nearPD = TRUE, sepExp
   Sg <- (Sg + t(Sg)) / 2
 
   # Enforce PDness if specified:
-  if (use_nearPD) {
-    if (min(eigen(Sg)$values) < 0) {
-      Sg <- as.matrix(Matrix::nearPD(Sg, keepDiag = FALSE)$mat)
-      if (verbose) {cat("covSS() using nearPD because min(d(MS.G)) < max(d(MS.E))...\n")}
-    }
+  if (min(eigen(Sg)$values) < 0) {
+    Sg <- as.matrix(Matrix::nearPD(Sg, keepDiag = FALSE)$mat)
+    if (verbose) {cat("covSS() using nearPD because min(d(MS.G)) < max(d(MS.E))...\n")}
+  }
 
-    # Something else...:
-    temp <- which(diag(Sg) < 0)
-    if (length(temp) > 0) {
-      Sg[temp, ] <- 0
-      Sg[, temp] <- 0
-      if (min(eigen(Sg)$values) < 0) {
-        Sg <- as.matrix(Matrix::nearPD(Sg, keepDiag = TRUE)$mat)
-      }
+  # Something else...:
+  temp <- which(diag(Sg) < 0)
+  if (length(temp) > 0) {
+    if (verbose) {cat("Resolving negative variances in Sg...\n")}
+    Sg[temp, ] <- 0
+    Sg[, temp] <- 0
+    if (min(eigen(Sg)$values) < 0) {
+      Sg <- as.matrix(Matrix::nearPD(Sg, keepDiag = TRUE)$mat)
     }
   }
 

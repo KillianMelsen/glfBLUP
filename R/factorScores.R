@@ -8,7 +8,7 @@
 #' @param loadings Loadings matrix.
 #' @param uniquenesses Uniquenesses matrix.
 #' @param m Latent dimension.
-#' @param type Type of factor scores to be calculated.
+#' @param type Type of factor scores to be calculated, can be \code{c("thomson", "genetic-thomson", "bartlett", "anderson")}.
 #' @param Se \code{NULL} by default. Must be specified if \code{"genetic-thomson"} is used as the type.
 #'
 #' @return A dataframe with the factor scores.

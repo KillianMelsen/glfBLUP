@@ -1,6 +1,6 @@
-#' regCor
+#' regularizedCorrelation
 #'
-#' \code{regCor} regularizes a phenotypic, genetic, or residual correlation matrix
+#' \code{regularizedCorrelation} regularizes a phenotypic, genetic, or residual correlation matrix
 #' using k-fold cross-validation.
 #'
 #' @param data A dataframe containing the genotypes in the first column and secondary features
@@ -9,14 +9,13 @@
 #' many folds must be created.
 #' @param what Which correlation matrix must be regularized? Can be \code{"phenotypic"}, \code{"genetic"}, or \code{"residual"}.
 #' @param dopar Boolean specifying whether to use parallelization or not.
-#' @param use_nearPD Boolean whether to use \code{Matrix::nearPD} to enforce PDness or not.
 #' @param penalty An optional argument containing a user-specified penalty between \code{0} and \code{1}. Specifying one overrides the data-driven regularization.
 #' @param verbose Boolean.
 #'
 #' @return A list containing the optimal penalty and the regularized correlation matrix.
 #' @export
 #'
-regCor <- function(data, folds = 5, what = "genetic", dopar = FALSE, use_nearPD = TRUE, penalty = NULL, verbose = TRUE) {
+regularizedCorrelation <- function(data, folds = 5, what = "genetic", dopar = FALSE, penalty = NULL, verbose = TRUE) {
 
   # # Checks:
   # stopifnot("NA values in the data!" = all(!is.na(data)),
@@ -59,7 +58,7 @@ regCor <- function(data, folds = 5, what = "genetic", dopar = FALSE, use_nearPD 
     # Optimization:
     optPenalty <- stats::optim(0.5, regCor_kcvl, method = "Brent", lower = 0, upper = 1,
                                data = data, folds = folds, genoMeans = genoMeans, reps = reps,
-                               dopar = dopar, use_nearPD = TRUE, what = what)$par
+                               dopar = dopar, what = what)$par
 
     if (dopar) {doParallel::stopImplicitCluster()}
   } else {
@@ -67,7 +66,7 @@ regCor <- function(data, folds = 5, what = "genetic", dopar = FALSE, use_nearPD 
     optPenalty <- penalty
   }
 
-  covmats <- covSS(data = data, genoMeans = genoMeans, reps = reps, use_nearPD = use_nearPD)
+  covmats <- covSS(data = data, genoMeans = genoMeans, reps = reps)
 
   if (verbose) {cat(sprintf("Optimal penalty value set at %.3f...\n", round(optPenalty, 3)))}
 

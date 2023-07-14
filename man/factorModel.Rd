@@ -14,7 +14,7 @@ factorModel(
 )
 }
 \arguments{
-\item{data}{The datamatrix used to estimate the (regularized) correlation matrix. Only used to determine the number of
+\item{data}{The datamatrix used to estimate the (regularized) correlation matrix used to fit the factor model. Only used to determine the number of
 individuals (in case of a phenotypic or residual correlation matrix) or number of genotypes (in case of a genetic correlation matrix).}
 
 \item{cormat}{The correlation matrix.}

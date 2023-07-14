@@ -13,7 +13,7 @@ factorSelect <- function(data, procedure = "leaps", verbose = TRUE) {
 
   if (procedure == "leaps") {
     data.train <- droplevels(stats::na.omit(data))
-    data.train.means <- genoMeans(data.train)
+    data.train.means <- genotypeMeans(data.train)
 
     factors <- names(data.train.means)[2:(ncol(data.train.means) - 1)]
 

@@ -1,13 +1,13 @@
-#' genoMeans
+#' genotypeMeans
 #'
-#' \code{.genoMeans} calculates the per-genotype means for secondary or focal trait data.
+#' \code{genotypeMeans} calculates the per-genotype means for secondary or focal trait data.
 #'
 #' @param data Dataframe containing the genotypes in the first column.
 #'
 #' @return A dataframe with genotypic means.
 #' @keywords internal
 #'
-genoMeans <- function(data) {
+genotypeMeans <- function(data) {
 
   # Calculate genotypic means:
   data.means <- stats::aggregate(data[, 2:ncol(data)], list(data[, 1]), mean)

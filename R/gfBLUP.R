@@ -41,10 +41,10 @@ gfBLUP <- function(data, selection = NULL, K, sepExp = FALSE, verbose = TRUE) {
 
   # Determining covariances between factors and focal trait:
   if (verbose) {cat("Determining covariances between factors and focal trait...\n")}
-  covmats <- covSS(data.subset[which(data.subset$G %in% train.set),], sepExp = sepExp, use_nearPD = TRUE, verbose = TRUE)
+  covmats <- covSS(data.subset[which(data.subset$G %in% train.set),], sepExp = sepExp, verbose = TRUE)
 
   # Reducing pseudoCRD data to genotypic means:
-  data.subset.means <- genoMeans(data.subset)
+  data.subset.means <- genotypeMeans(data.subset)
   data.subset.means <- data.subset.means[match(c(test.set, train.set), data.subset.means$G),]
   rownames(data.subset.means) <- c(test.set, train.set)
 

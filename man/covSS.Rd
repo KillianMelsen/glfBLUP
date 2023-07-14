@@ -4,14 +4,7 @@
 \alias{covSS}
 \title{covSS}
 \usage{
-covSS(
-  data,
-  genoMeans = NULL,
-  reps = NULL,
-  use_nearPD = TRUE,
-  sepExp = FALSE,
-  verbose = TRUE
-)
+covSS(data, genoMeans = NULL, reps = NULL, sepExp = FALSE, verbose = TRUE)
 }
 \arguments{
 \item{data}{Dataframe containing the genotypes in the first column and features/traits for which (co)variances should
@@ -22,9 +15,6 @@ repeated calculations if covSS is called for the same genotypes multiple times.}
 
 \item{reps}{Number of replicates. Also \code{NULL} by default but can be specified for the same reasons
 as \code{genoMeans}.}
-
-\item{use_nearPD}{Boolean indicating whether \code{Matrix::nearPD} should be used to enforce PDness of the
-genetic covariance matrix.}
 
 \item{sepExp}{Boolean specifying whether the focal trait was measured on different plants than the secondary
 features. Only use if there is a focal trait. Sets the residual covariances between secondary features or factors

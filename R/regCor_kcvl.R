@@ -8,14 +8,13 @@
 #' @param genoMeans Dataframe with genotypic means.
 #' @param reps Number of replicates.
 #' @param dopar Boolean specifying whether to use parallelization.
-#' @param use_nearPD Should \code{Matrix::nearPD} be used to enforce PDness?
 #' @param what Type of correlation matrix that will be regularized.
 #'
 #' @return The cross-validated negative log-likelihood to be minimized.
 #' @keywords internal
 #' @importFrom foreach %dopar%
 #'
-regCor_kcvl <- function(penalty, data, folds, genoMeans, reps, dopar, use_nearPD, what) {
+regCor_kcvl <- function(penalty, data, folds, genoMeans, reps, dopar, what) {
   if (!(dopar)) {
     cvLL <- 0
     for (f in 1:length(folds)){
@@ -26,7 +25,7 @@ regCor_kcvl <- function(penalty, data, folds, genoMeans, reps, dopar, use_nearPD
       R_dataframe[secondaries] <- lapply(R_dataframe[secondaries], as.numeric)
 
       # Calculating R:
-      covmats <- covSS(data = R_dataframe, genoMeans = genoMeans, reps = reps, use_nearPD = use_nearPD, verbose = FALSE)
+      covmats <- covSS(data = R_dataframe, genoMeans = genoMeans, reps = reps, verbose = FALSE)
       if (what == "phenotypic") {
         R <- stats::cov2cor(covmats$Sp)
       } else if (what == "genetic") {
@@ -42,7 +41,7 @@ regCor_kcvl <- function(penalty, data, folds, genoMeans, reps, dopar, use_nearPD
       S_dataframe[secondaries] <- lapply(S_dataframe[secondaries], as.numeric)
 
       # Calculating S:
-      covmats <- covSS(data = S_dataframe, genoMeans = genoMeans, reps = reps, use_nearPD = use_nearPD, verbose = FALSE)
+      covmats <- covSS(data = S_dataframe, genoMeans = genoMeans, reps = reps, verbose = FALSE)
       if (what == "phenotypic") {
         S <- stats::cov2cor(covmats$Sp)
       } else if (what == "genetic") {
@@ -66,7 +65,7 @@ regCor_kcvl <- function(penalty, data, folds, genoMeans, reps, dopar, use_nearPD
       R_dataframe[secondaries] <- lapply(R_dataframe[secondaries], as.numeric)
 
       # Calculating R:
-      covmats <- gfBLUP::covSS(data = R_dataframe, genoMeans = genoMeans, reps = reps, use_nearPD = use_nearPD, verbose = FALSE)
+      covmats <- gfBLUP::covSS(data = R_dataframe, genoMeans = genoMeans, reps = reps, verbose = FALSE)
       if (what == "phenotypic") {
         R <- stats::cov2cor(covmats$Sp)
       } else if (what == "genetic") {
@@ -82,7 +81,7 @@ regCor_kcvl <- function(penalty, data, folds, genoMeans, reps, dopar, use_nearPD
       S_dataframe[secondaries] <- lapply(S_dataframe[secondaries], as.numeric)
 
       # Calculating S:
-      covmats <- gfBLUP::covSS(data = S_dataframe, genoMeans = genoMeans, reps = reps, use_nearPD = use_nearPD, verbose = FALSE)
+      covmats <- gfBLUP::covSS(data = S_dataframe, genoMeans = genoMeans, reps = reps, verbose = FALSE)
       if (what == "phenotypic") {
         S <- stats::cov2cor(covmats$Sp)
       } else if (what == "genetic") {
