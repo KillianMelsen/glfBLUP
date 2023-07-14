@@ -32,7 +32,7 @@ regularizedCorrelation <- function(data, folds = 5, what = "genetic", dopar = FA
   }
 
   # Calculate genotype means:
-  genoMeans <- genoMeans(data)
+  genoMeans <- genotypeMeans(data)
 
   # Determine number of reps:
   n.rep.vector <- as.integer(table(data$G))
