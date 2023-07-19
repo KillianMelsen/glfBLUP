@@ -50,7 +50,12 @@ regCor_kcvl <- function(penalty, data, folds, genoMeans, reps, dopar, what) {
         S <- stats::cov2cor(covmats$Se)
       }
 
-      nf   <- dim(data[data[,1] %in% folds[[f]], , drop = FALSE])[1]
+      if (what == "genetic") {
+        nf <- length(folds[[f]])
+      } else {
+        nf <- dim(data[data[,1] %in% folds[[f]], , drop = FALSE])[1]
+      }
+
       cvLL <- cvLL + nf * regCor_ll(S, regCor_corlw(R, penalty))
     }
     return(cvLL/length(folds))
@@ -90,7 +95,12 @@ regCor_kcvl <- function(penalty, data, folds, genoMeans, reps, dopar, what) {
         S <- stats::cov2cor(covmats$Se)
       }
 
-      nf   <- dim(data[data[,1] %in% folds[[f]], , drop = FALSE])[1]
+      if (what == "genetic") {
+        nf <- length(folds[[f]])
+      } else {
+        nf <- dim(data[data[,1] %in% folds[[f]], , drop = FALSE])[1]
+      }
+
       LL <- nf * regCor_ll(S, regCor_corlw(R, penalty))
       return(LL)
     }
