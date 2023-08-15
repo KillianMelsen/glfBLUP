@@ -15,7 +15,7 @@ factorScores(data, loadings, uniquenesses, m, type = "thomson", Se = NULL)
 
 \item{m}{Latent dimension.}
 
-\item{type}{Type of factor scores to be calculated, can be \code{c("thomson", "genetic-thomson", "bartlett", "anderson")}.}
+\item{type}{Type of factor scores to be calculated, can be \code{c("thomson", "genetic-thomson", "genetic-thomson-repdiv", "bartlett", "anderson")}.}
 
 \item{Se}{\code{NULL} by default. Must be specified if \code{"genetic-thomson"} is used as the type.}
 }
