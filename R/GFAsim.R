@@ -52,7 +52,7 @@ GFAsim <- function(K, r, n.LSF, n.LNF, LSF.rho = 0, LNF.rho = 0, LSNF.rho = 0, S
   # Secondary features:
   for (i in 1:n.LF) {
     L[((i - 1) * S.per.LF + 1):(i * S.per.LF), i] <-
-      sign(stats::runif(100, -1, 1)) * sqrt(comms[((i - 1) * S.per.LF + 1):(i * S.per.LF)])
+      sign(stats::runif(S.per.LF, -1, 1)) * sqrt(comms[((i - 1) * S.per.LF + 1):(i * S.per.LF)])
   }
 
   # Focal trait:
