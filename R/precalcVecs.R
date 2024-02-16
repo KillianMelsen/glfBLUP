@@ -33,17 +33,25 @@ precalcVecs <- function(data, genoMeans, reps, what, folds, n.folds, verbose, do
       R_dataframe <- droplevels(data[!(data$G %in% folds[[i]]), , drop = FALSE])
 
       # Calculating eigen decomp of R:
-      R.ED <- ifelse(what == "genetic",
-                     eigen(stats::cov2cor(covSS(data = R_dataframe, genoMeans = genoMeans, reps = reps)$Sg)),
-                     eigen(stats::cov2cor(covSS(data = R_dataframe, genoMeans = genoMeans, reps = reps)$Se)))
+      if (what == "genetic") {
+        R.ED <- eigen(stats::cov2cor(covSS(data = R_dataframe, genoMeans = genoMeans, reps = reps)$Sg))
+      } else if (what == "residual") {
+        R.ED <- eigen(stats::cov2cor(covSS(data = R_dataframe, genoMeans = genoMeans, reps = reps)$Se))
+      } else {
+        stop("what must be either 'genetic' or 'residual'!")
+      }
 
       # Making a dataframe for the left out fold:
       S_dataframe <- droplevels(data[data$G %in% folds[[i]], , drop = FALSE])
 
       # Calculating A:
-      S <- ifelse(what == "genetic",
-                  stats::cov2cor(covSS(data = S_dataframe, genoMeans = genoMeans, reps = reps)$Sg),
-                  stats::cov2cor(covSS(data = S_dataframe, genoMeans = genoMeans, reps = reps)$Se))
+      if (what == "genetic") {
+        S <- stats::cov2cor(covSS(data = S_dataframe, genoMeans = genoMeans, reps = reps)$Sg)
+      } else if (what == "residual") {
+        S <- stats::cov2cor(covSS(data = S_dataframe, genoMeans = genoMeans, reps = reps)$Se)
+      } else {
+        stop("what must be either 'genetic' or 'residual'!")
+      }
 
       A.diag <-  diag(t(R.ED$vectors) %*% S %*% R.ED$vectors)
 
@@ -62,17 +70,25 @@ precalcVecs <- function(data, genoMeans, reps, what, folds, n.folds, verbose, do
       R_dataframe <- droplevels(data[!(data$G %in% folds[[i]]), , drop = FALSE])
 
       # Calculating eigen decomp of R:
-      R.ED <- ifelse(what == "genetic",
-                     eigen(stats::cov2cor(covSS(data = R_dataframe, genoMeans = genoMeans, reps = reps)$Sg)),
-                     eigen(stats::cov2cor(covSS(data = R_dataframe, genoMeans = genoMeans, reps = reps)$Se)))
+      if (what == "genetic") {
+        R.ED <- eigen(stats::cov2cor(covSS(data = R_dataframe, genoMeans = genoMeans, reps = reps)$Sg))
+      } else if (what == "residual") {
+        R.ED <- eigen(stats::cov2cor(covSS(data = R_dataframe, genoMeans = genoMeans, reps = reps)$Se))
+      } else {
+        stop("what must be either 'genetic' or 'residual'!")
+      }
 
       # Making a dataframe for the left out fold:
       S_dataframe <- droplevels(data[data$G %in% folds[[i]], , drop = FALSE])
 
       # Calculating A:
-      S <- ifelse(what == "genetic",
-                  stats::cov2cor(covSS(data = S_dataframe, genoMeans = genoMeans, reps = reps)$Sg),
-                  stats::cov2cor(covSS(data = S_dataframe, genoMeans = genoMeans, reps = reps)$Se))
+      if (what == "genetic") {
+        S <- stats::cov2cor(covSS(data = S_dataframe, genoMeans = genoMeans, reps = reps)$Sg)
+      } else if (what == "residual") {
+        S <- stats::cov2cor(covSS(data = S_dataframe, genoMeans = genoMeans, reps = reps)$Se)
+      } else {
+        stop("what must be either 'genetic' or 'residual'!")
+      }
 
       A.diag <-  diag(t(R.ED$vectors) %*% S %*% R.ED$vectors)
 

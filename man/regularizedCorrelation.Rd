@@ -20,7 +20,7 @@ in the other columns.}
 \item{folds}{A list of vectors containing the genotypes for each fold, or a number specifying how
 many folds must be created.}
 
-\item{what}{Which correlation matrix must be regularized? Can be \code{"phenotypic"}, \code{"genetic"}, or \code{"residual"}.}
+\item{what}{Which correlation matrix must be regularized? Can be \code{"genetic"} or \code{"residual"}.}
 
 \item{dopar}{Boolean specifying whether to use parallelization or not.}
 

@@ -1,6 +1,6 @@
-#' factorModel
+#' factorModel_slow
 #'
-#' \code{factorModel} fits the ML factor model (FAD) using a correlation matrix and a specified latent dimension.
+#' \code{factorModel_slow} fits the ML factor model using a correlation matrix and a specified latent dimension.
 #'
 #' @param data The datamatrix used to estimate the (regularized) correlation matrix used to fit the factor model. Only used to determine the number of
 #' individuals (in case of a phenotypic or residual correlation matrix) or number of genotypes (in case of a genetic correlation matrix).
@@ -11,15 +11,15 @@
 #' @param verbose Boolean
 #'
 #' @return A list with the varimax rotated loadings, uniquenesses, rotation matrix, and latent dimension.
-#' @export
+#' @keywords internal
 #'
-factorModel <- function(data, cormat, m = NULL, lower = 0.1, what = "genetic", verbose = TRUE) {
+factorModel_slow <- function(data, cormat, m = NULL, lower = 0.1, what = "genetic", verbose = TRUE) {
 
   # Checks:
-  stopifnot("what must be either 'genetic' or 'residual'!" = what %in% c("genetic", "residual"))
+  stopifnot("what must be either 'phenotypic', 'genetic' or 'residual'!" = what %in% c("phenotypic", "genetic", "residual"))
 
   # MP-bound:
-  if (what == "residual") {
+  if (what %in% c("phenotypic", "residual")) {
     ev.thr <- (1 + sqrt(ncol(cormat) / nrow(data)))^2
   } else if (what == "genetic") {
     ev.thr <- (1 + sqrt(ncol(cormat) / length(unique(data$G))))^2
@@ -33,15 +33,14 @@ factorModel <- function(data, cormat, m = NULL, lower = 0.1, what = "genetic", v
   }
   if (verbose) {cat(sprintf("Fitting factor model with %d factors...\n", m))}
 
-  fit <- fad::fad(factors = m, covmat = cormat, rotation = "varimax", lower = lower)
+  fit <- stats::factanal(factors = m, covmat = cormat, rotation = "varimax", lower = lower)
 
-  colnames(fit$loadings) <- paste0("F", 1:m)
-  rownames(fit$loadings) <- names(fit$uniquenesses) <- rownames(cormat)
-  rownames(fit$rotmat) <- colnames(fit$rotmat) <- colnames(fit$loadings)
+  rotmat <- fit$rotmat
+  rownames(rotmat) <- colnames(rotmat) <- colnames(fit$loadings)
 
   return(list(loadings = fit$loadings,
-              uniquenesses = fit$uniquenesses,
-              rotmat = fit$rotmat,
+              uniquenesses = diag(fit$uniquenesses),
+              rotmat = rotmat,
               m = m))
 }
 

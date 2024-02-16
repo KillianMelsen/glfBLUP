@@ -2,8 +2,6 @@ Package: gfBLUP
 Type: Package
 Title: What the Package Does (Title Case)
 Version: 0.2.1
-Author: Who wrote it
-Maintainer: The package maintainer <yourself@somewhere.net>
 Description: More about what it does (maybe more than one line)
     Use four spaces when indenting paragraphs within the Description.
 License: AGPL (>= 3)
@@ -12,6 +10,7 @@ LazyData: true
 Imports: 
     doParallel,
     expm,
+    fad,
     FMradio,
     foreach,
     leaps,
@@ -19,3 +18,5 @@ Imports:
     parallel,
     stats
 RoxygenNote: 7.2.3
+Authors@R: 
+    person("Killian A.C.", "Melsen", , "killian.melsen@wur.nl", role = c("aut", "cre"))
