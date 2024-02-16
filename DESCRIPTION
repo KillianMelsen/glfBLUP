@@ -1,7 +1,7 @@
 Package: gfBLUP
 Type: Package
 Title: What the Package Does (Title Case)
-Version: 0.2.1
+Version: 1.0.0
 Description: More about what it does (maybe more than one line)
     Use four spaces when indenting paragraphs within the Description.
 License: AGPL (>= 3)
