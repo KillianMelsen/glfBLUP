@@ -20,9 +20,11 @@ factorModel <- function(data, cormat, m = NULL, lower = 0.1, what = "genetic", v
 
   # MP-bound:
   if (what == "residual") {
-    ev.thr <- (1 + sqrt(ncol(cormat) / nrow(data)))^2
+    n.obs <- nrow(data)
+    ev.thr <- (1 + sqrt(ncol(cormat) / n.obs))^2
   } else if (what == "genetic") {
-    ev.thr <- (1 + sqrt(ncol(cormat) / length(unique(data$G))))^2
+    n.obs <- length(unique(data$G))
+    ev.thr <- (1 + sqrt(ncol(cormat) / n.obs))^2
   }
 
   if (verbose) {cat(sprintf("M-P bound is %.3f...\n", round(ev.thr, 3)))}
@@ -33,14 +35,14 @@ factorModel <- function(data, cormat, m = NULL, lower = 0.1, what = "genetic", v
   }
   if (verbose) {cat(sprintf("Fitting factor model with %d factors...\n", m))}
 
-  fit <- fad::fad(factors = m, covmat = cormat, rotation = "varimax", lower = lower)
+  fit <- fad::fad(factors = m, covmat = cormat, rotation = "varimax", lower = lower, n.obs = n.obs)
 
   colnames(fit$loadings) <- paste0("F", 1:m)
   rownames(fit$loadings) <- names(fit$uniquenesses) <- rownames(cormat)
   rownames(fit$rotmat) <- colnames(fit$rotmat) <- colnames(fit$loadings)
 
   return(list(loadings = fit$loadings,
-              uniquenesses = fit$uniquenesses,
+              uniquenesses = diag(fit$uniquenesses),
               rotmat = fit$rotmat,
               m = m))
 }
