@@ -7,13 +7,14 @@
 #' @param selection Optional argument. Output from \code{gfBLUP::factorSelect}. All factors are used if left unspecified.
 #' @param K The kinship matrix with the genotype identifiers as row and column names.
 #' @param sepExp Boolean indicating whether the focal trait and secondary features were measured on different plants/plots.
+#' @param returnBLUPs Boolean indicating whether a matrix with BLUPs should be returned.
 #' @param verbose Boolean
 #'
 #' @return A list with the test set predictions, factor selection, and the genetic and residual covariance matrices of factors
 #' and focal trait, as well as their plot-level heritabilities.
 #' @export
 #'
-gfBLUP <- function(data, selection = NULL, K, sepExp = FALSE, verbose = TRUE) {
+gfBLUP <- function(data, selection = NULL, K, sepExp = FALSE, returnBLUPs = FALSE, verbose = TRUE) {
 
   # Determining training and test set as well as the scenario (CV1 or CV2):
   train.set <- as.character(unique(data$G[!is.na(data$Y)]))
@@ -58,7 +59,6 @@ gfBLUP <- function(data, selection = NULL, K, sepExp = FALSE, verbose = TRUE) {
   if (CV == "CV1") {
     # Calculating focal trait test set BLUPs:
     focalBLUP_test <- train2test(BLUPs_train$focal_gBLUP, K = K, train.set = train.set, test.set = test.set)
-
   } else if (CV == "CV2") {
     # Calculating all test set BLUPs:
     allBLUPs_test <- train2test(BLUPs_train$all_gBLUPs, K = K, train.set = train.set, test.set = test.set)
@@ -77,12 +77,29 @@ gfBLUP <- function(data, selection = NULL, K, sepExp = FALSE, verbose = TRUE) {
     names(focalBLUP_test) <- test.set
   }
 
+  if (returnBLUPs & CV == "CV2") {
+    BLUPs <- rbind(BLUPs_train$all_gBLUPs, allBLUPs_test)
+  } else if (returnBLUPs & CV == "CV1") {
+    allBLUPs_test <- train2test(BLUPs_train$all_gBLUPs, K = K, train.set = train.set, test.set = test.set)
+    BLUPs <- rbind(BLUPs_train$all_gBLUPs, allBLUPs_test)
+  }
+
   h2s <- diag(covmats$Sg) / diag(covmats$Sg + covmats$Se)
   names(h2s) <- colnames(covmats$Sg)
 
-  return(list(preds = focalBLUP_test,
-              factorSelection = selection,
-              Sg = covmats$Sg,
-              Se = covmats$Se,
-              h2s = h2s))
+  if (returnBLUPs) {
+    ret <- list(preds = focalBLUP_test,
+                factorSelection = selection,
+                Sg = covmats$Sg,
+                Se = covmats$Se,
+                h2s = h2s,
+                BLUPs = BLUPs)
+  } else {
+    ret <- list(preds = focalBLUP_test,
+                factorSelection = selection,
+                Sg = covmats$Sg,
+                Se = covmats$Se,
+                h2s = h2s)
+  }
+  return(ret)
 }

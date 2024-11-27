@@ -4,7 +4,14 @@
 \alias{gfBLUP}
 \title{gfBLUP}
 \usage{
-gfBLUP(data, selection = NULL, K, sepExp = FALSE, verbose = TRUE)
+gfBLUP(
+  data,
+  selection = NULL,
+  K,
+  sepExp = FALSE,
+  returnBLUPs = FALSE,
+  verbose = TRUE
+)
 }
 \arguments{
 \item{data}{The dataframe containing the secondary features (factors) and the focal trait. The column
@@ -15,6 +22,8 @@ order should be G-F1-...-Fm-Y.}
 \item{K}{The kinship matrix with the genotype identifiers as row and column names.}
 
 \item{sepExp}{Boolean indicating whether the focal trait and secondary features were measured on different plants/plots.}
+
+\item{returnBLUPs}{Boolean indicating whether a matrix with BLUPs should be returned.}
 
 \item{verbose}{Boolean}
 }

@@ -17,6 +17,6 @@ Imports:
     Matrix,
     parallel,
     stats
-RoxygenNote: 7.2.3
+RoxygenNote: 7.3.1
 Authors@R: 
     person("Killian A.C.", "Melsen", , "killian.melsen@wur.nl", role = c("aut", "cre"))
