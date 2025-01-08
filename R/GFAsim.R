@@ -17,13 +17,14 @@
 #' @param S.se2 Observed feature residual variance.
 #' @param Y.sg2 Focal trait genetic variance.
 #' @param Y.se2 Focal trait residual variance.
+#' @param resCors Should there be random residual correlations among secondary features and between sec. features and the focal trait?
 #'
 #' @return A list with the "real" simulated dataframe, benchmark dataframe, and the corresponding genetic and residual covariance matrices.
 #' The list also contains the prediction target and simulated BLUEs for all features.
 #' @export
 #'
 GFAsim <- function(K, r, n.LSF, n.LNF, LSF.rho = 0, LNF.rho = 0, LSNF.rho = 0, S.per.LF = 10, Y.psi,
-                   L.min = 0.3, L.max = 0.8, S.sg2, S.se2, Y.sg2, Y.se2) {
+                   L.min = 0.3, L.max = 0.8, S.sg2, S.se2, Y.sg2, Y.se2, resCors = TRUE) {
 
   n.LF <- n.LSF + n.LNF
 
@@ -69,8 +70,13 @@ GFAsim <- function(K, r, n.LSF, n.LNF, LSF.rho = 0, LNF.rho = 0, LSNF.rho = 0, S
   SD.E <- diag(x = c(rep(sqrt(S.se2), n.LF * S.per.LF), sqrt(Y.se2)))
 
   Sg <- outer(diag(SD.G), diag(SD.G)) * Rg
-  Se <- diag(x = 1 - diag(Sg))
-  Re <- stats::cov2cor(Se)
+  if (resCors) {
+    Re <- cov2cor(clusterGeneration::genPositiveDefMat(dim = n.LF * S.per.LF + 1, covMethod = "eigen")$Sigma)
+    Se <- outer(diag(SD.E), diag(SD.E)) * Re
+  } else {
+    Se <- diag(x = 1 - diag(Sg))
+    Re <- stats::cov2cor(Se)
+  }
 
   # G = LX + E
   # Simulating X (factor scores):
@@ -85,7 +91,11 @@ GFAsim <- function(K, r, n.LSF, n.LNF, LSF.rho = 0, LNF.rho = 0, LSNF.rho = 0, S
   # Y = G + e
   # Y = LX + E + e
   # Simulating e on correlation scale:
-  e <- simMVData(rowCov = diag(nrow(K) * r), colCov = diag(n.LF * S.per.LF + 1))
+  if (resCors) {
+    e <- simMVData(rowCov = diag(nrow(K) * r), colCov = Re)
+  } else {
+    e <- simMVData(rowCov = diag(nrow(K) * r), colCov = diag(n.LF * S.per.LF + 1))
+  }
 
   # Scaling everything to the covariance scale and adding it all up:
   Y <- kronecker((G %*% SD.G), matrix(rep(1, r), ncol = 1)) + e %*% SD.E
@@ -102,7 +112,8 @@ GFAsim <- function(K, r, n.LSF, n.LNF, LSF.rho = 0, LNF.rho = 0, LSNF.rho = 0, S
 
   pred.target <- G[, ncol(G)]
 
-  Rg.benchmark <- rbind(cbind(phi, matrix(0, nrow(phi))), matrix(0, 1, (ncol(phi) + 1)))
+  Rg.benchmark <- rbind(cbind(phi, matrix(0, nrow(phi))),
+                        matrix(0, 1, (ncol(phi) + 1)))
   Rg.benchmark[nrow(Rg.benchmark), ncol(Rg.benchmark)] <- 1
   Rg.benchmark[nrow(Rg.benchmark), 1:n.LSF] <- Rg.benchmark[1:n.LSF, ncol(Rg.benchmark)] <- sqrt((1 - Y.psi) / n.LSF)
   Sg.benchmark <- outer(c(rep(1, n.LF), sqrt(Y.sg2)), c(rep(1, n.LF), sqrt(Y.sg2))) * Rg.benchmark
