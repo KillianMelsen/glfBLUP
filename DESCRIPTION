@@ -8,7 +8,6 @@ License: AGPL (>= 3)
 Encoding: UTF-8
 LazyData: true
 Imports: 
-    clusterGeneration,
     doParallel,
     expm,
     fad,
@@ -18,6 +17,6 @@ Imports:
     Matrix,
     parallel,
     stats
-RoxygenNote: 7.3.1
+RoxygenNote: 7.3.2
 Authors@R: 
     person("Killian A.C.", "Melsen", , "killian.melsen@wur.nl", role = c("aut", "cre"))

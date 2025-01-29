@@ -17,14 +17,16 @@
 #' @param S.se2 Observed feature residual variance.
 #' @param Y.sg2 Focal trait genetic variance.
 #' @param Y.se2 Focal trait residual variance.
-#' @param resCors Should there be random residual correlations among secondary features and between sec. features and the focal trait?
+#' @param resCors Should there be random residual correlations among secondary features
+#' and between sec. features and the focal trait? Residual correlations will be normally
+#' distributed with mean 0 and a standard deviation of approximately 0.05.
 #'
 #' @return A list with the "real" simulated dataframe, benchmark dataframe, and the corresponding genetic and residual covariance matrices.
 #' The list also contains the prediction target and simulated BLUEs for all features.
 #' @export
 #'
 GFAsim <- function(K, r, n.LSF, n.LNF, LSF.rho = 0, LNF.rho = 0, LSNF.rho = 0, S.per.LF = 10, Y.psi,
-                   L.min = 0.3, L.max = 0.8, S.sg2, S.se2, Y.sg2, Y.se2, resCors = TRUE) {
+                   L.min = 0.3, L.max = 0.8, S.sg2, S.se2, Y.sg2, Y.se2, resCors = FALSE) {
 
   n.LF <- n.LSF + n.LNF
 
@@ -71,7 +73,11 @@ GFAsim <- function(K, r, n.LSF, n.LNF, LSF.rho = 0, LNF.rho = 0, LSNF.rho = 0, S
 
   Sg <- outer(diag(SD.G), diag(SD.G)) * Rg
   if (resCors) {
-    Re <- cov2cor(clusterGeneration::genPositiveDefMat(dim = n.LF * S.per.LF + 1, covMethod = "eigen")$Sigma)
+    Re <- matrix(0, 801, 801)
+    Re[upper.tri(Re)] <- stats::rnorm(length(Re[upper.tri(Re)]), 0, 0.1)
+    Re <- Re + t(Re)
+    diag(Re) <- 1
+    Re <- as.matrix(Matrix::nearPD(Re, corr = TRUE)$mat)
     Se <- outer(diag(SD.E), diag(SD.E)) * Re
   } else {
     Se <- diag(x = 1 - diag(Sg))

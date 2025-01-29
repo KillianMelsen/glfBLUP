@@ -20,7 +20,7 @@ GFAsim(
   S.se2,
   Y.sg2,
   Y.se2,
-  resCors = TRUE
+  resCors = FALSE
 )
 }
 \arguments{
@@ -54,7 +54,9 @@ GFAsim(
 
 \item{Y.se2}{Focal trait residual variance.}
 
-\item{resCors}{Should there be random residual correlations among secondary features and between sec. features and the focal trait?}
+\item{resCors}{Should there be random residual correlations among secondary features
+and between sec. features and the focal trait? Residual correlations will be normally
+distributed with mean 0 and a standard deviation of approximately 0.05.}
 }
 \value{
 A list with the "real" simulated dataframe, benchmark dataframe, and the corresponding genetic and residual covariance matrices.
