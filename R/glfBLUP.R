@@ -1,10 +1,10 @@
-#' gfBLUP
+#' glfBLUP
 #'
-#' \code{gfBLUP} uses genetic factors to produce multi-trait genomic predictions.
+#' \code{glfBLUP} uses genetic factors to produce multi-trait genomic predictions.
 #'
 #' @param data The dataframe containing the secondary features (factors) and the focal trait. The column
 #' order should be G-F1-...-Fm-Y.
-#' @param selection Optional argument. Output from \code{gfBLUP::factorSelect}. All factors are used if left unspecified.
+#' @param selection Optional argument. Output from \code{glfBLUP::factorSelect}. All factors are used if left unspecified.
 #' @param K The kinship matrix with the genotype identifiers as row and column names.
 #' @param sepExp Boolean indicating whether the focal trait and secondary features were measured on different plants/plots.
 #' @param returnBLUPs Boolean indicating whether a matrix with BLUPs should be returned.
@@ -14,7 +14,7 @@
 #' and focal trait, as well as their plot-level heritabilities.
 #' @export
 #'
-gfBLUP <- function(data, selection = NULL, K, sepExp = FALSE, returnBLUPs = FALSE, verbose = TRUE) {
+glfBLUP <- function(data, selection = NULL, K, sepExp = FALSE, returnBLUPs = FALSE, verbose = TRUE) {
 
   # Determining training and test set as well as the scenario (CV1 or CV2):
   train.set <- as.character(unique(data$G[!is.na(data$Y)]))

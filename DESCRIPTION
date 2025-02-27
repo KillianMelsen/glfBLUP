@@ -1,9 +1,9 @@
-Package: gfBLUP
+Package: glfBLUP
 Type: Package
-Title: What the Package Does (Title Case)
+Title: Genetic Latent Factor based genomic prediction
 Version: 1.0.0
-Description: More about what it does (maybe more than one line)
-    Use four spaces when indenting paragraphs within the Description.
+Description: Contains functions to compress secondary feature data into latent genetic
+    factors before including the factors in multivariate genomic prediction.
 License: AGPL (>= 3)
 Encoding: UTF-8
 LazyData: true

@@ -62,7 +62,7 @@ regCor_kcvl <- function(penalty, data, folds, genoMeans, reps, dopar, what) {
 
   } else if (dopar) {
     ### PARALLELIZATION
-    cvLL <- foreach::foreach(f = 1:length(folds), .combine = "+", .packages = c("gfBLUP")) %dopar% {
+    cvLL <- foreach::foreach(f = 1:length(folds), .combine = "+", .packages = c("glfBLUP")) %dopar% {
       # Make dataframe for 4/5 folds:
       R_dataframe <- data[!(data[,1] %in% folds[[f]]), , drop = FALSE]
       R_dataframe$G <- factor(as.character(R_dataframe$G))
@@ -70,7 +70,7 @@ regCor_kcvl <- function(penalty, data, folds, genoMeans, reps, dopar, what) {
       R_dataframe[secondaries] <- lapply(R_dataframe[secondaries], as.numeric)
 
       # Calculating R:
-      covmats <- gfBLUP::covSS(data = R_dataframe, genoMeans = genoMeans, reps = reps, verbose = FALSE)
+      covmats <- glfBLUP::covSS(data = R_dataframe, genoMeans = genoMeans, reps = reps, verbose = FALSE)
       if (what == "phenotypic") {
         R <- stats::cov2cor(covmats$Sp)
       } else if (what == "genetic") {
@@ -86,7 +86,7 @@ regCor_kcvl <- function(penalty, data, folds, genoMeans, reps, dopar, what) {
       S_dataframe[secondaries] <- lapply(S_dataframe[secondaries], as.numeric)
 
       # Calculating S:
-      covmats <- gfBLUP::covSS(data = S_dataframe, genoMeans = genoMeans, reps = reps, verbose = FALSE)
+      covmats <- glfBLUP::covSS(data = S_dataframe, genoMeans = genoMeans, reps = reps, verbose = FALSE)
       if (what == "phenotypic") {
         S <- stats::cov2cor(covmats$Sp)
       } else if (what == "genetic") {

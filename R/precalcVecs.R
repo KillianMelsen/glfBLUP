@@ -27,7 +27,7 @@ precalcVecs <- function(data, genoMeans, reps, what, folds, n.folds, verbose, do
     doParallel::registerDoParallel(cores = cores)
     cat(sprintf("Parallelizing the pre-calculation process using %d cores...\n", cores))
 
-    vecs <- foreach::foreach(i = 1:n.folds, .packages = c("gfBLUP")) %dopar% {
+    vecs <- foreach::foreach(i = 1:n.folds, .packages = c("glfBLUP")) %dopar% {
 
       # Making a dataframe for 4/5 folds:
       R_dataframe <- droplevels(data[!(data$G %in% folds[[i]]), , drop = FALSE])

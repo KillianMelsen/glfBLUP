@@ -1,4 +1,4 @@
-# gfBLUP
+# glfBLUP
 
 
 
